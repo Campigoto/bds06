@@ -13,6 +13,7 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.devsuperior.movieflix.DTO.MovieCardDTO;
+import com.devsuperior.movieflix.DTO.MovieDTO;
 import com.devsuperior.movieflix.DTO.MovieDetailsDTO;
 import com.devsuperior.movieflix.DTO.ReviewDTO;
 import com.devsuperior.movieflix.services.MovieService;
@@ -34,14 +35,25 @@ public class MovieResource {
 		return ResponseEntity.ok().body(movieDto);
 	}
 	
-	@GetMapping()
-	public ResponseEntity<Page<MovieCardDTO>> findByGenre(
-			@RequestParam(value = "genreId", defaultValue = "0") Long genreId,
-			Pageable pageable) {
-		
-		Page<MovieCardDTO> page = service.findByGenre(genreId, pageable);
-		return ResponseEntity.ok(page);
+	
+	@GetMapping
+	public ResponseEntity<Page<MovieDTO>> findAll(
+	          	@RequestParam(value = "genreId", defaultValue = "0") Long genreId,
+	          	Pageable pageable) {
+	   	
+	   	Page<MovieDTO> list = service.findAllPaged(genreId, pageable);         	
+	   	return ResponseEntity.ok().body(list);
 	}
+
+	
+	//@GetMapping()
+	//public ResponseEntity<Page<MovieCardDTO>> findByGenre(
+	//		@RequestParam(value = "genreId", defaultValue = "0") Long genreId,
+	//		Pageable pageable) {
+	//	
+	//	Page<MovieCardDTO> page = service.findByGenre(genreId, pageable);
+	//	return ResponseEntity.ok(page);
+	//}
 	
 	@GetMapping(value = "/{movieId}/reviews")
 	public ResponseEntity<List<ReviewDTO>> findMovieReviews(@PathVariable Long movieId ) {

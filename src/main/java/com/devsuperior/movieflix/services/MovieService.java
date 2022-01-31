@@ -1,5 +1,7 @@
 package com.devsuperior.movieflix.services;
 
+import java.util.Arrays;
+import java.util.List;
 import java.util.Optional;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -9,8 +11,11 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import com.devsuperior.movieflix.DTO.MovieCardDTO;
+import com.devsuperior.movieflix.DTO.MovieDTO;
 import com.devsuperior.movieflix.DTO.MovieDetailsDTO;
+import com.devsuperior.movieflix.entities.Genre;
 import com.devsuperior.movieflix.entities.Movie;
+import com.devsuperior.movieflix.repositories.GenreRepository;
 import com.devsuperior.movieflix.repositories.MovieRepository;
 import com.devsuperior.movieflix.services.exceptions.ResourceNotFoundException;
 
@@ -20,6 +25,9 @@ public class MovieService  {
 	@Autowired
 	private MovieRepository repository;
 	
+	@Autowired
+	private GenreRepository genreRepository;
+	
 	
 	@Transactional(readOnly = true)
 	public MovieDetailsDTO findById(Long id) {
@@ -27,35 +35,23 @@ public class MovieService  {
 		Movie entity = obj.orElseThrow(() -> new ResourceNotFoundException("Entity not found"));
 		return new MovieDetailsDTO(entity);
 	}
-	/*
-	
-	@Transactional(readOnly = true)
-	public List<GameDTO> findAll() {
-		
-		List<Game> list = repository.findAll();
-		return list.stream().map(x -> new GameDTO(x)).collect(Collectors.toList());
-	}
-
-	public List<GenreDTO> findByGenre(Long genreId, Pageable pageable) {
-		Optional<Movie> list = repository.findById(genreId);
-		return list.stream().map(x -> new GenreDTO(x)).collect(Collectors.toList());
-		return null;
-	}
-
-
-/*
-	public Page<MovieCardDTO> findByGenre(Long genreId, Pageable pageable) {
-		List<Movie> list = repository.findByGenre(genreId, pageable);
-		return list.map(x -> new MovieCardDTO(x).getReviews());
-		
-	}
-*/
 
 
 	public Page<MovieCardDTO> findByGenre(Long genreId, Pageable pageable) {
 		// TODO Auto-generated method stub
 		return null;
 	}
+
+
+	@Transactional(readOnly = true)
+	public Page<MovieDTO> findAllPaged(Long genreId, Pageable pageable) {
+	 	List<Genre> genres = (genreId == 0) ? null :
+	 		Arrays.asList(genreRepository.getOne(genreId));
+	 		 	Page<Movie> list = repository.find(genres, pageable);
+	 		 	return list.map(x -> new MovieDTO(x));
+	}
+
+	
 
 	
 
