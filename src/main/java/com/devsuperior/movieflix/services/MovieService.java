@@ -11,7 +11,6 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import com.devsuperior.movieflix.DTO.MovieCardDTO;
-import com.devsuperior.movieflix.DTO.MovieDTO;
 import com.devsuperior.movieflix.DTO.MovieDetailsDTO;
 import com.devsuperior.movieflix.entities.Genre;
 import com.devsuperior.movieflix.entities.Movie;
@@ -36,19 +35,12 @@ public class MovieService  {
 		return new MovieDetailsDTO(entity);
 	}
 
-
-	public Page<MovieCardDTO> findByGenre(Long genreId, Pageable pageable) {
-		// TODO Auto-generated method stub
-		return null;
-	}
-
-
 	@Transactional(readOnly = true)
-	public Page<MovieDTO> findAllPaged(Long genreId, Pageable pageable) {
+	public Page<MovieCardDTO> findAllPaged(Long genreId, Pageable pageable) {
 	 	List<Genre> genres = (genreId == 0) ? null :
 	 		Arrays.asList(genreRepository.getOne(genreId));
 	 		 	Page<Movie> list = repository.find(genres, pageable);
-	 		 	return list.map(x -> new MovieDTO(x));
+	 		 	return list.map(x -> new MovieCardDTO(x));
 	}
 
 	

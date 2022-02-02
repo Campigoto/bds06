@@ -19,7 +19,7 @@ public class MovieCardDTO implements Serializable {
 	
 	public MovieCardDTO(Movie entity) {
 		id = entity.getId();
-		title = entity.getSubTitle();
+		title = entity.getTitle();
 		subTitle = entity.getSubTitle();
 		year = entity.getYear();
 		imgUrl = entity.getImgUrl();
